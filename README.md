@@ -21,9 +21,9 @@ After 10 epochs, calculated accuracy is about 0.97, the loss is about 0.07
 
 Loss function for the training is basically just a binary crossentropy.
 
-![img/0test.jpg](img/0test.jpg)
+![img/test.tif](img/test.tif)
 
-![img/0label.jpg](img/0label.jpg)
+![img/test_predict.tif](img/test_predict.tif)
 
 
 ## About
