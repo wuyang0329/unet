@@ -1,6 +1,5 @@
 ### unet
 Keras implementation of unet for Gray pictures.
-my original image's type is png ,and i convert its type to tif.
 ### Data
 You can download train && test data from here:http://www.cvlibs.net/download.php?file=data_road.zip
 
@@ -17,7 +16,7 @@ you should give your path to the train and test images
 ### Results
 The model is trained for 10 epochs.
 
-After 10 epochs, calculated accuracy is about 0.97, the loss is about 0.07
+After 10 epochs, calculated accuracy is about 0.98, the loss is about 0.04
 
 Loss function for the training is basically just a binary crossentropy.
 
