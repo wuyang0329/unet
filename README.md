@@ -10,14 +10,13 @@ You can download train && test data from here:http://www.cvlibs.net/download.php
 - Tensorflow-gpu-1.8.0
 - Keras-2.2.4
 ## train and test 
-#change the path
-run the train.py to train you own model and test.py to predict the test images
+change the data path and run the train.py to train you own model and test.py to predict the test images
 you should give your path to the train and test images 
 
 ### Results
-The model is trained for 10 epochs.
+The model is trained for 30 epochs.
 
-After 10 epochs, calculated accuracy is about 0.98, the loss is about 0.04
+After 30 epochs, calculated accuracy is about 0.989, the loss is about 0.02
 
 Loss function for the training is basically just a binary crossentropy.
 
