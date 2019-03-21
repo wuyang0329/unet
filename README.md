@@ -10,7 +10,8 @@ You can download train && test data from here:http://www.cvlibs.net/download.php
 - Tensorflow-gpu-1.8.0
 - Keras-2.2.4
 ## train and test 
-run the main.py to train you own model and predict the test images
+#change the path
+run the train.py to train you own model and test.py to predict the test images
 you should give your path to the train and test images 
 
 ### Results
