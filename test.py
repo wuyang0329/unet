@@ -1,5 +1,4 @@
-#encoding:utf-8
-from model import *
+from model_v2 import *
 from data import *
 import numpy as np
 import cv2
@@ -26,25 +25,19 @@ def image_normalized(file_path):
 
 if __name__ == '__main__':
 
-    #path to images which are prepared to train a model
-    train_path = "./data/crack/train"
-    image_folder = "image"
-    label_folder = "annotation"
-
     #path to images which aring wating for predicting
-    test_path = "./data/road/test/images"
+    test_path = "data/road/test"
 
     # save the predict images
-    save_path = "./data/road/test/predict"
+    save_path = "data/road/test"
 
-    dp = data_preprocess(train_path, image_folder, label_folder, test_path, save_path)
+    dp = data_preprocess(test_path=test_path,save_path=save_path)
 
     #load model
-    model = load_model('./model/road_model_v3.hdf5')
+    model = load_model('./model/road_model_v1.hdf5')
 
     for name in os.listdir(test_path):
         image_path = os.path.join(test_path,name)
         x,img_size = image_normalized(image_path)
         results = model.predict(x)
-        img_standard = cv2.cvtColor(results[0], cv2.COLOR_GRAY2RGB)
-        dp.saveResult(np.asarray([results[0]]),img_size,name.split('.')[0])
+        dp.saveResult([results[0]],img_size,name.split('.')[0])
