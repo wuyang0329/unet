@@ -1,8 +1,9 @@
 ### unet
 Keras implementation of unet.
 ### Data
-You can download Kitti dataset from here:http://www.cvlibs.net/download.php?file=data_road.zip
-                 CamVid dataset from here:https://github.com/preddy5/segnet/tree/master/CamVid
+You can download:
+Kitti dataset from here:http://www.cvlibs.net/download.php?file=data_road.zip
+CamVid dataset from here:https://github.com/preddy5/segnet/tree/master/CamVid
 ### How to use
 ## Requirement
 - OpenCV
