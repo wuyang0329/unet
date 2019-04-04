@@ -15,10 +15,15 @@ CamVid dataset from here:https://github.com/preddy5/segnet/tree/master/CamVid
 - Keras-2.2.4
 ## train and test
 Before you start training, you must make sure your dataset have the right format
+
 If you just two classes to  classify, you should set flag_multi_class equal to False and num_class=2
+
 if you have many classes to classify, you should set flag_multi_class equal to True and num_class=number of your classes
+
 Then you should set image type , image_color_mode and label_color_mode.
+
 change the data path and run the train.py to train you own model and test.py to predict the test images
+
 you should give your path to the train and test images 
 
 ### Results
