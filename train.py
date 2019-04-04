@@ -24,7 +24,11 @@ if __name__ == '__main__':
     label_folder = "trainannot"
     log_filepath = './log'
     flag_multi_class = True
-    dp = data_preprocess(train_path=train_path,image_folder=image_folder,label_folder=label_folder)
+    num_class = 12
+    dp = data_preprocess(train_path=train_path,
+                         image_folder=image_folder,label_folder=label_folder, 
+                         flag_multi_class = flag_multi_class,
+                         num_classes=num_class)
 
     # train your own model
     train_data = dp.trainGenerator(batch_size=2)
