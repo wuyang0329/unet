@@ -1,3 +1,4 @@
+#encoding:utf-8
 import  os
 import cv2
 
@@ -7,7 +8,7 @@ before your train or predict you should transfrom your images to standard format
 
 def image_normalized(dir_path,save_dir):
     '''
-    tif£¬size:512*512£¬gray
+    tifÂ£Â¬size:512*512Â£Â¬gray
     :param dir_path: path to your images directory
     :param save_dir: path to your images after normalized
     :return:
@@ -22,4 +23,4 @@ def image_normalized(dir_path,save_dir):
             cv2.imwrite(save_path, img_standard)
 
 if __name__ == '__main__':
-    image_normalized('./data/crack/test_new','./data/crack/test_new')
+    image_normalized('./data/image','./data/image_new')
