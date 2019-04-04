@@ -36,7 +36,7 @@ if __name__ == '__main__':
     model = unet(num_class=12)
 
     tb_cb = TensorBoard(log_dir=log_filepath)
-    model_checkpoint = keras.callbacks.ModelCheckpoint('./model/road_model_0404_v3.hdf5', monitor='loss',verbose=1,save_best_only=True)
+    model_checkpoint = keras.callbacks.ModelCheckpoint('./model/road_model.hdf5', monitor='loss',verbose=1,save_best_only=True)
     history = model.fit_generator(train_data,steps_per_epoch=200,epochs=30,callbacks=[model_checkpoint,tb_cb])
 
     # draw the loss and accuracy curve
