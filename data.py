@@ -10,13 +10,29 @@ import warnings
 warnings.filterwarnings("ignore")
 
 BackGround = [255, 255, 255]
-
 road = [0, 0, 0]
-COLOR_DICT = np.array([BackGround, road])
+# COLOR_DICT = np.array([BackGround, road])
+one = [128, 128, 128]
+two = [128, 0, 0]
+three = [192, 192, 128]
+four = [255, 69, 0]
+five = [128, 64, 128]
+six = [60, 40, 222]
+seven = [128, 128, 0]
+eight = [192, 128, 128]
+nine = [64, 64, 128]
+ten = [64, 0, 128]
+eleven = [64, 64, 0]
+twelve = [0, 128, 192]
+COLOR_DICT = np.array([one, two,three,four,five,six,seven,eight,nine,ten,eleven,twelve])
 
 
 class data_preprocess:
-    def __init__(self, train_path, image_folder, label_folder, test_path, save_path, img_rows=512, img_cols=512):
+    def __init__(self, train_path=None, image_folder=None, label_folder=None,
+                 test_path=None, save_path=None,
+                 img_rows=512, img_cols=512,
+                    flag_multi_class=False,
+                 num_classes = 2):
         self.img_rows = img_rows
         self.img_cols = img_cols
         self.train_path = train_path
@@ -33,19 +49,12 @@ class data_preprocess:
                                   horizontal_flip=True,
                                   fill_mode='nearest')
         self.image_color_mode = "rgb"
-        self.label_color_mode = "grayscale"
+        self.label_color_mode = "rgb"
 
-        self.flag_multi_class = False
-        self.num_class = 2
+        self.flag_multi_class = flag_multi_class
+        self.num_class = num_classes
         self.target_size = (512, 512)
         self.img_type = 'png'
-
-    def label2class(self, label):
-        x = np.zeros([512, 512, 12])
-        for i in range(512):
-            for j in range(512):
-                x[i, j, int(label[i][j])] = 1  # 属于第m类，第三维m处值为1
-        return x
 
     def adjustData(self, img, label, flag_multi_class, num_class):
         if (flag_multi_class):
@@ -54,17 +63,12 @@ class data_preprocess:
             new_label = np.zeros(label.shape + (num_class,))
             for i in range(num_class):
                 new_label[label == i, i] = 1
-            new_label = np.reshape(new_label, (new_label.shape[0], new_label.shape[1] * new_label.shape[2],
-                                               new_label.shape[3])) if flag_multi_class else np.reshape(new_label, (
-                new_label.shape[0] * new_label.shape[1], new_label.shape[2]))
             label = new_label
         elif (np.max(img) > 1):
             img = img / 255.
             label = label / 255.
             label[label > 0.5] = 1
             label[label <= 0.5] = 0
-            # img = img_to_array(img)
-            # label = self.label2class(img_to_array(label))
         return (img, label)
 
     def trainGenerator(self, batch_size, image_save_prefix="image", label_save_prefix="label",
@@ -111,25 +115,22 @@ class data_preprocess:
             img = np.reshape(img, (1,) + img.shape)
             yield img
 
-    def labelVisualize(self, color_dict, img):
-        img = img[:, :, 0] if len(img.shape) == 3 else img
-        img_out = np.zeros(img.shape + (3,))
-        for i in range(self.num_class):
-            print('test')
-            img_out[img == i, :] = color_dict[i]
-        return img_out
-
-    def saveResult(self, npyfile, size, name):
+    def saveResult(self, npyfile, size, name,threshold=127):
         for i, item in enumerate(npyfile):
-            img = self.labelVisualize(self.num_class, COLOR_DICT, item) if self.flag_multi_class else item[:, :, 0]
-            img = cv2.resize(img, size, interpolation=cv2.INTER_CUBIC)
-            cv2.imwrite(os.path.join(self.save_path, ("%s_predict." + self.img_type) % (name)),img)
-            img = cv2.imread(os.path.join(self.save_path, ("%s_predict." + self.img_type) % (name)))
-            for k in range(len(img)):
-                for j in range(len(img[k])):
-                    num = img[k][j][0]
-                    if num == 0:
-                        img[k][j] = road
-                    else:
-                        img[k][j] = BackGround
-            cv2.imwrite(os.path.join(self.save_path, ("%s_predict." + self.img_type) % (name)), img)
+            img = item
+            img_std = np.zeros((img.shape[0], img.shape[1], 3), dtype=np.uint8)
+            if self.flag_multi_class:
+                for row in range(len(img)):
+                    for col in range(len(img[row])):
+                        num = np.argmax(img[row][col])
+                        img_std[row][col] = COLOR_DICT[num]
+            else:
+                for k in range(len(img)):
+                    for j in range(len(img[k])):
+                        num = img[k][j]
+                        if num < (threshold/255.0):
+                            img_std[k][j] = road
+                        else:
+                            img_std[k][j] = BackGround
+            img_std = cv2.resize(img_std, size, interpolation=cv2.INTER_CUBIC)
+            cv2.imwrite(os.path.join(self.save_path, ("%s_predict." + self.img_type) % (name)), img_std)
