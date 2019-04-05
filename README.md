@@ -42,11 +42,11 @@ Loss function for the training is categorical_crossentropy.
 ![image/camvid_predict.png](image/Seq05VD_f03510_predict.png)
 
 and the loss and accuracy curve in there:
-![image/acc&loss.png](image/acc&loss.png)
+![image/acc&loss.png](image/loss&acc.png.png)
 
 
 Then you also can use label_visualization.py to visual your resut like this:
-![image/acc&loss.png](image/mask.png)
+![image/mask.png](image/mask.png)
 
 ## About
 Unet is More commonly used in medical areas.
