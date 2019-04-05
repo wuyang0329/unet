@@ -24,7 +24,6 @@ Then you should set image type , image_color_mode and label_color_mode.
 
 change the data path and run the train.py to train you own model and test.py to predict the test images
 
-you should give your path to the train and test images 
 
 ### Results
 The binary classify model is trained for 30 epochs(300 step per epoch) in Kitti dataset.
