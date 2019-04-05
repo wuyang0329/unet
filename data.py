@@ -29,15 +29,19 @@ COLOR_DICT = np.array([one, two,three,four,five,six,seven,eight,nine,ten,eleven,
 
 class data_preprocess:
     def __init__(self, train_path=None, image_folder=None, label_folder=None,
+                 valid_path=None,valid_image_folder =None,valid_label_folder = None,
                  test_path=None, save_path=None,
                  img_rows=512, img_cols=512,
-                    flag_multi_class=False,
+                 flag_multi_class=False,
                  num_classes = 2):
         self.img_rows = img_rows
         self.img_cols = img_cols
         self.train_path = train_path
         self.image_folder = image_folder
         self.label_folder = label_folder
+        self.valid_path = valid_path
+        self.valid_image_folder = valid_image_folder
+        self.valid_label_folder = valid_label_folder
         self.test_path = test_path
         self.save_path = save_path
         self.data_gen_args = dict(rotation_range=0.2,
@@ -56,12 +60,12 @@ class data_preprocess:
         self.target_size = (512, 512)
         self.img_type = 'png'
 
-    def adjustData(self, img, label, flag_multi_class, num_class):
-        if (flag_multi_class):
+    def adjustData(self, img, label):
+        if (self.flag_multi_class):
             img = img / 255.
             label = label[:, :, :, 0] if (len(label.shape) == 4) else label[:, :, 0]
-            new_label = np.zeros(label.shape + (num_class,))
-            for i in range(num_class):
+            new_label = np.zeros(label.shape + (self.num_class,))
+            for i in range(self.num_class):
                 new_label[label == i, i] = 1
             label = new_label
         elif (np.max(img) > 1):
@@ -102,18 +106,43 @@ class data_preprocess:
             seed=seed)
         train_generator = zip(image_generator, label_generator)
         for (img, label) in train_generator:
-            img, label = self.adjustData(img, label, self.flag_multi_class, self.num_class)
+            img, label = self.adjustData(img, label)
             yield (img, label)
 
     def testGenerator(self):
         filenames = os.listdir(self.test_path)
         for filename in filenames:
-            img = io.imread(os.path.join(self.test_path, filename), as_gray=True)
+            img = io.imread(os.path.join(self.test_path, filename), as_gray=False)
             img = img / 255.
             img = trans.resize(img, self.target_size, mode='constant')
             img = np.reshape(img, img.shape + (1,)) if (not self.flag_multi_class) else img
             img = np.reshape(img, (1,) + img.shape)
             yield img
+
+    def validLoad(self, batch_size,seed=7):
+        image_datagen = ImageDataGenerator(**self.data_gen_args)
+        label_datagen = ImageDataGenerator(**self.data_gen_args)
+        image_generator = image_datagen.flow_from_directory(
+            self.valid_path,
+            classes=[self.valid_image_folder],
+            class_mode=None,
+            color_mode=self.image_color_mode,
+            target_size=self.target_size,
+            batch_size=batch_size,
+            seed=seed)
+        label_generator = label_datagen.flow_from_directory(
+            self.valid_path,
+            classes=[self.valid_label_folder],
+            class_mode=None,
+            color_mode=self.label_color_mode,
+            target_size=self.target_size,
+            batch_size=batch_size,
+            seed=seed)
+        train_generator = zip(image_generator, label_generator)
+        for (img, label) in train_generator:
+            img, label = self.adjustData(img, label)
+            yield (img, label)
+        # return imgs,labels
 
     def saveResult(self, npyfile, size, name,threshold=127):
         for i, item in enumerate(npyfile):
