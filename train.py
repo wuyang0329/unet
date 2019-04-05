@@ -40,7 +40,7 @@ if __name__ == '__main__':
     model = unet(num_class=num_classes)
 
     tb_cb = TensorBoard(log_dir=log_filepath)
-    model_checkpoint = keras.callbacks.ModelCheckpoint('./model/CamVid_model_0405_v1.hdf5', monitor='val_loss',verbose=1,save_best_only=True)
+    model_checkpoint = keras.callbacks.ModelCheckpoint('./model/CamVid_model_v1.hdf5', monitor='val_loss',verbose=1,save_best_only=True)
     history = model.fit_generator(train_data,
                                   steps_per_epoch=200,epochs=30,
                                   validation_steps=10,
